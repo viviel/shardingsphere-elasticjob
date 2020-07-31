@@ -29,6 +29,9 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 
+import java.util.Objects;
+import java.util.TimeZone;
+
 /**
  * Job schedule controller.
  */
@@ -40,6 +43,8 @@ public final class JobScheduleController {
     private final JobDetail jobDetail;
     
     private final String triggerIdentity;
+    
+    private final TimeZone timeZone;
     
     /**
      * Execute job.
@@ -94,7 +99,18 @@ public final class JobScheduleController {
     }
     
     private Trigger createCronTrigger(final String cron) {
-        return TriggerBuilder.newTrigger().withIdentity(triggerIdentity).withSchedule(CronScheduleBuilder.cronSchedule(cron).withMisfireHandlingInstructionDoNothing()).build();
+        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder
+                .cronSchedule(cron)
+                .withMisfireHandlingInstructionDoNothing()
+                .inTimeZone(getTimeZone());
+        return TriggerBuilder.newTrigger().withIdentity(triggerIdentity).withSchedule(cronScheduleBuilder).build();
+    }
+    
+    private TimeZone getTimeZone() {
+        if (Objects.isNull(timeZone)) {
+            return TimeZone.getDefault();
+        }
+        return timeZone;
     }
     
     /**

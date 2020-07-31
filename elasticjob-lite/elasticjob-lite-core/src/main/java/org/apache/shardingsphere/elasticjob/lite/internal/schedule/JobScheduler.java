@@ -124,7 +124,9 @@ public final class JobScheduler {
     }
     
     private JobScheduleController createJobScheduleController() {
-        JobScheduleController result = new JobScheduleController(createScheduler(), createJobDetail(), getJobConfig().getJobName());
+        JobScheduleController result = new JobScheduleController(
+                createScheduler(), createJobDetail(), getJobConfig().getJobName(), getJobConfig().getTimeZone()
+        );
         JobRegistry.getInstance().registerJob(getJobConfig().getJobName(), result);
         registerStartUpInfo();
         return result;

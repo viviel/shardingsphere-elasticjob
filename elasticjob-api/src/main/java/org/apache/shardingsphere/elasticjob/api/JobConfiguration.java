@@ -25,6 +25,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Properties;
+import java.util.TimeZone;
 
 /**
  * ElasticJob configuration.
@@ -36,6 +37,8 @@ public final class JobConfiguration {
     private final String jobName;
     
     private final String cron;
+    
+    private final TimeZone timeZone;
     
     private final int shardingTotalCount;
     
@@ -84,6 +87,8 @@ public final class JobConfiguration {
         private final String jobName;
         
         private String cron;
+    
+        private TimeZone timeZone;
         
         private final int shardingTotalCount;
         
@@ -124,6 +129,19 @@ public final class JobConfiguration {
         public Builder cron(final String cron) {
             if (null != cron) {
                 this.cron = cron;
+            }
+            return this;
+        }
+    
+        /**
+         * Time zone.
+         *
+         * @param timeZone time zone
+         * @return job configuration builder
+         */
+        public Builder timeZone(final TimeZone timeZone) {
+            if (null != timeZone) {
+                this.timeZone = timeZone;
             }
             return this;
         }
@@ -340,7 +358,7 @@ public final class JobConfiguration {
         public final JobConfiguration build() {
             Preconditions.checkArgument(!Strings.isNullOrEmpty(jobName), "jobName can not be empty.");
             Preconditions.checkArgument(shardingTotalCount > 0, "shardingTotalCount should larger than zero.");
-            return new JobConfiguration(jobName, cron, shardingTotalCount, shardingItemParameters, jobParameter, 
+            return new JobConfiguration(jobName, cron, timeZone, shardingTotalCount, shardingItemParameters, jobParameter,
                     monitorExecution, failover, misfire, maxTimeDiffSeconds, reconcileIntervalMinutes,
                     jobShardingStrategyType, jobExecutorServiceHandlerType, jobErrorHandlerType, description, props, disabled, overwrite);
         }

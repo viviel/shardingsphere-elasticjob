@@ -32,6 +32,8 @@ import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 import org.quartz.impl.triggers.CronTriggerImpl;
 
+import java.util.TimeZone;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -54,7 +56,9 @@ public final class JobScheduleControllerTest {
     
     @Before
     public void setUp() {
-        jobScheduleController = new JobScheduleController(scheduler, jobDetail, "test_job_Trigger");
+        jobScheduleController = new JobScheduleController(
+                scheduler, jobDetail, "test_job_Trigger", TimeZone.getDefault()
+        );
     }
     
     @Test(expected = JobSystemException.class)
